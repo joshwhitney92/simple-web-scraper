@@ -1,3 +1,5 @@
+mod web_scraper;
+
 #[allow(unused)]
 struct Country {
     pub name: String,
