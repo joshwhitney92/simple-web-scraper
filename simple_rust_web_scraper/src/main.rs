@@ -56,12 +56,38 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     /* Print the country info */
 
-    for country in countries {
+    for country in countries.iter() {
         println!("Country Name: {}", country.name);
         println!("Country Capital: {}", country.capital);
         println!("Country Population: {}", country.population);
         println!("Country Area: {}", country.area);
         println!("");
+    }
+
+    let _ = write_to_csv(&countries)?;
+
+    Ok(())
+}
+
+fn write_to_csv(countries: &Vec<Country>) -> Result<(), Box<dyn std::error::Error>> {
+    let mut writer = csv::Writer::from_path("countries.csv").map_err(|err| {
+        format!(
+            "Could not open file for writing!\nError: {}",
+            err.to_string()
+        )
+    })?;
+
+    // write the csv header
+    writer.write_record(&["name", "capital", "population", "area"])?;
+
+    // populate the file with each country
+    for country in countries {
+        writer.write_record(&[
+            country.name.clone(),
+            country.capital.clone(),
+            country.population.clone(),
+            country.area.clone(),
+        ])?;
     }
 
     Ok(())
