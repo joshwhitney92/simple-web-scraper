@@ -1,6 +1,7 @@
-use crate::web_scraper::{ScrapeStrategy, WebScraper};
+use crate::{utils::http_client::{self, HTTPClient, HTTPGetBlocking}, web_scraper::{ScrapeStrategy, WebScraper}};
 
 #[allow(unused)]
+/// This is the data we will scrape from the page.
 pub struct Country {
     pub name: String,
     pub capital: String,
@@ -8,21 +9,37 @@ pub struct Country {
     pub area: String,
 }
 
+/// This is called a `Unit-Like-Struct`
+/// Often used as markers. 
+// Here we will use it for a particular ScrapeStrategy 
+// implementation that will scrape for Countries.
 pub struct CountryStrategy;
+
 impl ScrapeStrategy<Country> for CountryStrategy {
-    fn scrape_it(&self, scraper: &WebScraper, url: &str) -> Result<Vec<Country>, Box<dyn std::error::Error>> {
+    fn scrape_it(
+        &self,
+        scraper: &WebScraper,
+        url: &str,
+        http_client: &HTTPClient
+    ) -> Result<Vec<Country>, Box<dyn std::error::Error>> {
         // Connect to the target page
-        let response = reqwest::blocking::get(url)?;
+
+        // NOTE: We have injected the http_client dependency
+        let response = http_client.get_blocking(&url)?;
 
         // extract the raw html and print it
-        let html = response.text()?;
+        let html = response.html;
+
+        // NOTE: Inject this dependency
         let document = scraper::Html::parse_document(&html);
 
         // Get the top level Country container selector.
-        let html_country_info_box_selector = scraper::Selector::parse(".country")?;
+        let html_country_info_box_selector =
+            scraper::Selector::parse(".country")?;
 
         // Retrieve the iterator over the actual DOM elements with the selector.
-        let html_country_info_box_elements = document.select(&html_country_info_box_selector);
+        let html_country_info_box_elements =
+            document.select(&html_country_info_box_selector);
 
         // iterate over the country html elements
         // and scrape them all.
@@ -69,6 +86,5 @@ impl ScrapeStrategy<Country> for CountryStrategy {
         }
 
         Ok(countries)
-
     }
 }

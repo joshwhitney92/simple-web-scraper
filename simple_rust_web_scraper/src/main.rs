@@ -7,18 +7,18 @@ pub mod utils {
 }
 
 use models::country::{Country, CountryStrategy};
+use utils::http_client::{self, HTTPClient};
 use web_scraper::{Scrape, WebScraper};
-
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let url = "https://www.scrapethissite.com/pages/simple/";
     let scraper = WebScraper::new();
-    let countries = scraper.scrape(CountryStrategy, url)?;
+    let http_client = HTTPClient::new();
+    let countries = scraper.scrape(CountryStrategy, &http_client, url)?;
     let _ = write_to_csv(&countries)?;
 
     Ok(())
 }
-
 
 pub fn write_to_csv(countries: &Vec<Country>) -> Result<(), Box<dyn std::error::Error>> {
     let mut writer = csv::Writer::from_path("countries.csv").map_err(|err| {
