@@ -38,7 +38,16 @@
           nativeBuildInputs = with pkgs; [];
 
           # Things i need at runtime
-          buildInputs = with pkgs; [];
+          myBuildInputs = with pkgs; [
+            # llvmPackages_20.libc
+            # llvmPackages_20.stdenv
+            # llvmPackages_20.libcxx
+            # llvmPackages_20.libcxxClang
+            clang
+            llvmPackages_20.bintools
+            glibc.dev
+            gcc
+          ];
 
           # Define your package list once
           myPackages = with pkgs; [
@@ -54,6 +63,11 @@
             # sqlite
             openssl
             pkg-config
+
+            # required for `tidier` crate
+            cmake
+            gnumake
+            # llvmPackages_20.stdenv
             # tailwindcss
 
             # {{{ Add these as needed
@@ -92,16 +106,25 @@
             # Add any additional packages needed to the myPackages array above.
             packages = myPackages;
 
+            buildInputs = myBuildInputs;
+
             # Set any environment variables for your dev shell
             env = {
               GREETING = "Welcome to your Rust environment!";
 
               # Make sure all libraries are added to the PATH
               LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath myPackages;
+              LIBCLANG_PATH = pkgs.lib.makeLibraryPath [ pkgs.llvmPackages_20.libclang.lib ];
             };
 
             # Add any shell logic you want executed any time the environment is activated
             shellHook = ''
+
+              # export CFLAGS="-I/usr/include"
+
+              # export C_INCLUDE_PATH=$(nix eval --raw nixpkgs#glibc.dev)/include
+              # export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
+              # export CPATH="${pkgs.glibc.dev}/include:$CPATH"
 
               # Welcome message for shell
               echo $GREETING | cowsay | lolcat

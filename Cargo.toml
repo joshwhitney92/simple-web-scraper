@@ -1,7 +1,7 @@
 [workspace]
 # Set this to quiet the "resolver = 1" warning when using the default resolver
 resolver = "2"
-members = ["simple_rust_web_scraper"]
+members = ["simple_rust_web_scraper", "tui"]
 
 
 # These settings will greatly reduce the binary size when \
