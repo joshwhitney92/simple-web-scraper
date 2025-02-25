@@ -2,3 +2,4 @@
 /.direnv
 /target
 *.csv
+*.vim
