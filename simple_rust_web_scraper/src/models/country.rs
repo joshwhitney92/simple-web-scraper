@@ -1,4 +1,4 @@
-use crate::{utils::http_client::{self, HTTPClient, HTTPGetBlocking}, web_scraper::{ScrapeStrategy, WebScraper}};
+use crate::{utils::http_client::{HTTPClient, HTTPGetBlocking}, web_scraper::{ScrapeStrategy, WebScraper}};
 
 #[allow(unused)]
 /// This is the data we will scrape from the page.

@@ -7,7 +7,7 @@ pub mod utils {
 }
 
 use models::country::{Country, CountryStrategy};
-use utils::http_client::{self, HTTPClient};
+use utils::http_client::HTTPClient;
 use web_scraper::{Scrape, WebScraper};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

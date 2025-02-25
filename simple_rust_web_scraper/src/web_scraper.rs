@@ -1,4 +1,4 @@
-use crate::utils::http_client::{self, HTTPClient};
+use crate::utils::http_client::HTTPClient;
 
 
 /// Implement a strategy for the types you want to scrape.
