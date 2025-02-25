@@ -24,12 +24,12 @@ pub fn write_to_csv(countries: &Vec<Country>) -> Result<(), Box<dyn std::error::
     let mut writer = csv::Writer::from_path("countries.csv").map_err(|err| {
         format!(
             "Could not open file for writing!\nError: {}",
-            err.to_string()
+            err
         )
     })?;
 
     // write the csv header
-    writer.write_record(&["name", "capital", "population", "area"])?;
+    writer.write_record(["name", "capital", "population", "area"])?;
 
     // populate the file with each country
     for country in countries {

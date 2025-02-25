@@ -25,7 +25,7 @@ impl ScrapeStrategy<Country> for CountryStrategy {
         // Connect to the target page
 
         // NOTE: We have injected the http_client dependency
-        let response = http_client.get_blocking(&url)?;
+        let response = http_client.get_blocking(url)?;
 
         // extract the raw html and print it
         let html = response.html;

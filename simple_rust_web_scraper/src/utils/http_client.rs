@@ -29,6 +29,6 @@ mod private_members {
 
 impl HTTPGetBlocking for HTTPClient {
     fn get_blocking(&self, url: &str) -> Result<HTTPResponse, Box<dyn std::error::Error>> {
-        private_members::get_blocking(&url)
+        private_members::get_blocking(url)
     }
 }
