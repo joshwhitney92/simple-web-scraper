@@ -82,7 +82,7 @@ impl ScrapeStrategy<Country> for CountryStrategy {
             println!("Country Capital: {}", country.capital);
             println!("Country Population: {}", country.population);
             println!("Country Area: {}", country.area);
-            println!("");
+            println!();
         }
 
         Ok(countries)

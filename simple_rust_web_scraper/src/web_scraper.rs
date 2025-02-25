@@ -13,6 +13,7 @@ pub trait Scrape {
 }
 
 #[allow(unused)]
+#[derive(Debug, Default)]
 pub struct WebScraper {
 }
 
@@ -41,7 +42,7 @@ impl WebScraper {
 
 impl Scrape for WebScraper {
     fn scrape<R, T: ScrapeStrategy<R>>(&self, strategy: T, http_client: &HTTPClient, url: &str) -> Result<Vec<R>, Box<dyn std::error::Error>> {
-        strategy.scrape_it(self, url, &http_client)
+        strategy.scrape_it(self, url, http_client)
     }
 }
 

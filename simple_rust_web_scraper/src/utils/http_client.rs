@@ -2,6 +2,7 @@ pub struct HTTPResponse {
     pub html: String
 }
 
+#[derive(Debug, Default)]
 pub struct HTTPClient {}
 
 pub trait HTTPGetBlocking {

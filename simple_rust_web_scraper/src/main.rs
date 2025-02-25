@@ -15,7 +15,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let scraper = WebScraper::new();
     let http_client = HTTPClient::new();
     let countries = scraper.scrape(CountryStrategy, &http_client, url)?;
-    let _ = write_to_csv(&countries)?;
+    write_to_csv(&countries)?;
 
     Ok(())
 }
