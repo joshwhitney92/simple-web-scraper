@@ -21,12 +21,11 @@ struct Args {
     url: String,
 
     #[arg(short, long, value_enum)]
-    strat: Strategy,
+    strategy: Strategy,
 }
 
 /// Run the command parser to greet names
 pub fn run() -> Result<(), Box<dyn std::error::Error>> {
-
     // Collect the arguments with clap
     let args = Args::parse();
     let url = args.url;
@@ -39,7 +38,7 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     // This will hold the scraped results
     let results: Vec<Box<dyn GetPrettyHTML>>;
 
-    match args.strat {
+    match args.strategy {
         Strategy::General => {
             results = scraper
                 .scrape(GeneralStrategy, &http_client, &url)?

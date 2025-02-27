@@ -25,7 +25,6 @@ impl ScrapeStrategy<DiceJob> for DiceJobStrategy {
         url: &str,
         http_client: &crate::utils::http_client::HTTPClient,
     ) -> Result<Vec<DiceJob>, Box<dyn std::error::Error>> {
-        // Connect to the target page
 
         // NOTE: We have injected the http_client dependency
         let response = http_client.get_blocking(url)?;
@@ -52,18 +51,6 @@ impl ScrapeStrategy<DiceJob> for DiceJobStrategy {
             // to select the child elements.
             let descrption = scraper.get_element_html(&html_job_detail_element)?;
 
-            // let capital = scraper.parse_string_from_element_with_css_class(
-            //     &html_country_info_box_element,
-            //     ".country-capital",
-            // )?;
-            // let population = scraper.parse_string_from_element_with_css_class(
-            //     &html_country_info_box_element,
-            //     ".country-population",
-            // )?;
-            // let area = scraper.parse_string_from_element_with_css_class(
-            //     &html_country_info_box_element,
-            //     ".country-area",
-            // )?;
             let dice_job = DiceJob { descrption };
 
             jobs.push(dice_job);
