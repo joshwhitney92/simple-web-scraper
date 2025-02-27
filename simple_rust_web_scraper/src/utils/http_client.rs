@@ -1,5 +1,5 @@
 pub struct HTTPResponse {
-    pub html: String
+    pub html: String,
 }
 
 #[derive(Debug, Default)]
@@ -17,13 +17,13 @@ impl HTTPClient {
 
 /// Private module to encapsulate reqwest call.
 mod private_members {
-    use reqwest::blocking::Response;
     use super::HTTPResponse;
+    use reqwest::blocking::Response;
 
     pub fn get_blocking(url: &str) -> Result<HTTPResponse, Box<dyn std::error::Error>> {
         let response: Response = reqwest::blocking::get(url)?;
-        Ok(HTTPResponse { 
-            html: response.text()?
+        Ok(HTTPResponse {
+            html: response.text()?,
         })
     }
 }
@@ -35,4 +35,3 @@ impl HTTPGetBlocking for HTTPClient {
         private_members::get_blocking(url)
     }
 }
-

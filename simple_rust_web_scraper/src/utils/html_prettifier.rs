@@ -32,7 +32,7 @@ mod private_helpers {
             Err(e) => {
                 println!("Could not format file - Error {e}");
                 String::from(html)
-            },
+            }
         }
     }
 }

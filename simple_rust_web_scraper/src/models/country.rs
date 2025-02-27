@@ -1,4 +1,7 @@
-use crate::{utils::http_client::{HTTPClient, HTTPGetBlocking}, web_scraper::{ScrapeStrategy, WebScraper}};
+use crate::{
+    utils::http_client::{HTTPClient, HTTPGetBlocking},
+    web_scraper::{ScrapeStrategy, WebScraper},
+};
 
 use super::base::GetPrettyHTML;
 
@@ -12,8 +15,8 @@ pub struct Country {
 }
 
 /// This is called a `Unit-Like-Struct`
-/// Often used as markers. 
-// Here we will use it for a particular ScrapeStrategy 
+/// Often used as markers.
+// Here we will use it for a particular ScrapeStrategy
 // implementation that will scrape for Countries.
 pub struct CountryStrategy;
 
@@ -28,7 +31,7 @@ impl ScrapeStrategy<Country> for CountryStrategy {
         &self,
         scraper: &WebScraper,
         url: &str,
-        http_client: &HTTPClient
+        http_client: &HTTPClient,
     ) -> Result<Vec<Country>, Box<dyn std::error::Error>> {
         // Connect to the target page
 
@@ -42,12 +45,10 @@ impl ScrapeStrategy<Country> for CountryStrategy {
         let document = scraper::Html::parse_document(&html);
 
         // Get the top level Country container selector.
-        let html_country_info_box_selector =
-            scraper::Selector::parse(".country")?;
+        let html_country_info_box_selector = scraper::Selector::parse(".country")?;
 
         // Retrieve the iterator over the actual DOM elements with the selector.
-        let html_country_info_box_elements =
-            document.select(&html_country_info_box_selector);
+        let html_country_info_box_elements = document.select(&html_country_info_box_selector);
 
         // iterate over the country html elements
         // and scrape them all.

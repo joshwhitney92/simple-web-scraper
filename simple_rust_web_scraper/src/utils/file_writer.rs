@@ -1,5 +1,3 @@
-
-
 #[derive(Debug, Clone)]
 pub struct FileWriter {}
 
@@ -18,7 +16,6 @@ pub trait AppendToFile {
 pub trait CreateFile {
     fn create_file(file_path: &str) -> Result<(), Box<dyn std::error::Error>>;
 }
-
 
 /*
  * Encapsulate hard dependencies
