@@ -57,28 +57,23 @@ impl ScrapeStrategy<DiceJob> for DiceJobStrategy {
             // to select the child elements.
             let descrption = scraper.get_element_html(&html_job_detail_element)?;
 
-            let dice_job: DiceJob;
-            match company_name {
-                Some(inner) => {
-                    dice_job = DiceJob {
-                        descrption,
-                        company_name: Some(
-                            inner
-                                .text()
-                                .next()
-                                .unwrap_or("No_Name")
-                                .replace(" ", "_")
-                                .to_string(),
-                        ),
-                    }
-                }
-                _ => {
-                    dice_job = DiceJob {
-                        descrption,
-                        company_name: Some(String::from("No_Name")) 
-                    }
-                }
-            }
+            let dice_job: DiceJob = match company_name {
+                Some(inner) => DiceJob {
+                    descrption,
+                    company_name: Some(
+                        inner
+                            .text()
+                            .next()
+                            .unwrap_or("No_Name")
+                            .replace(" ", "_")
+                            .to_string(),
+                    ),
+                },
+                _ => DiceJob {
+                    descrption,
+                    company_name: Some(String::from("No_Name")),
+                },
+            };
 
             jobs.push(dice_job);
         }

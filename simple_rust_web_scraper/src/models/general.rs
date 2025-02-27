@@ -1,6 +1,6 @@
 use crate::{
     utils::{html_prettifier::{HtmlPrettifier, Prettify}, http_client::HTTPGetBlocking},
-    web_scraper::{ElementToString, ScrapeStrategy},
+    web_scraper::ScrapeStrategy,
 };
 
 use super::base::GetPrettyHTML;
@@ -18,6 +18,7 @@ impl GetPrettyHTML for General {
     }
 }
 
+#[allow(unused_variables)]
 impl ScrapeStrategy<General> for GeneralStrategy {
     fn scrape_it(
         &self,
