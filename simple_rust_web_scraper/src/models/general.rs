@@ -1,7 +1,7 @@
 use crate::{
     utils::{
         html_prettifier::{HtmlPrettifier, Prettify},
-        http_client::HTTPGetBlocking,
+        http_client::{HTTPClient, HTTPGetBlocking},
     },
     web_scraper::ScrapeStrategy,
 };

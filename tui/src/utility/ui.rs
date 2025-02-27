@@ -32,7 +32,7 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     // Dependencies for scraping
     let scraper = WebScraper::new();
-    let http_client = HTTPClient::new();
+    let http_client = HTTPClient::init();
     let mut file_path = String::from("output.html");
 
     // This will hold the scraped results

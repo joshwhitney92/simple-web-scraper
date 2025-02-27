@@ -7,7 +7,7 @@ use simple_rust_web_scraper::{
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let url = "https://www.scrapethissite.com/pages/simple/";
     let scraper = WebScraper::new();
-    let http_client = HTTPClient::new();
+    let http_client = HTTPClient::init();
     let countries = scraper.scrape(CountryStrategy, &http_client, url)?;
     write_to_csv(&countries)?;
 
