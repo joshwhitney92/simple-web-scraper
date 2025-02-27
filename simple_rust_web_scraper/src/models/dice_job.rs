@@ -1,5 +1,8 @@
 use crate::{
-    utils::{html_prettifier::{HtmlPrettifier, Prettify}, http_client::HTTPGetBlocking},
+    utils::{
+        html_prettifier::{HtmlPrettifier, Prettify},
+        http_client::HTTPGetBlocking,
+    },
     web_scraper::{ElementToString, ScrapeStrategy},
 };
 
@@ -8,6 +11,7 @@ use super::base::GetPrettyHTML;
 #[derive(Debug, Clone, PartialEq)]
 pub struct DiceJob {
     pub descrption: String,
+    pub company_name: Option<String>,
 }
 
 pub struct DiceJobStrategy;
@@ -25,7 +29,6 @@ impl ScrapeStrategy<DiceJob> for DiceJobStrategy {
         url: &str,
         http_client: &crate::utils::http_client::HTTPClient,
     ) -> Result<Vec<DiceJob>, Box<dyn std::error::Error>> {
-
         // NOTE: We have injected the http_client dependency
         let response = http_client.get_blocking(url)?;
 
@@ -35,12 +38,15 @@ impl ScrapeStrategy<DiceJob> for DiceJobStrategy {
         // NOTE: Inject this dependency
         let document = scraper::Html::parse_document(&html);
 
-
         // Get only the job description
-        let html_job_desc_selector = scraper::Selector::parse(r#"div[data-testid="jobDescriptionHtml"]"#)?;
+        let html_job_desc_selector =
+            scraper::Selector::parse(r#"div[data-testid="jobDescriptionHtml"]"#)?;
+        let html_company_name_selector =
+            scraper::Selector::parse(r#"a[data-cy="companyNameLink"]"#)?;
 
         // Retrieve the iterator over the actual DOM elements with the selector.
         let html_job_desc_elements = document.select(&html_job_desc_selector);
+        let company_name = document.select(&html_company_name_selector).next();
 
         // iterate over the country html elements
         // and scrape them all.
@@ -51,7 +57,28 @@ impl ScrapeStrategy<DiceJob> for DiceJobStrategy {
             // to select the child elements.
             let descrption = scraper.get_element_html(&html_job_detail_element)?;
 
-            let dice_job = DiceJob { descrption };
+            let dice_job: DiceJob;
+            match company_name {
+                Some(inner) => {
+                    dice_job = DiceJob {
+                        descrption,
+                        company_name: Some(
+                            inner
+                                .text()
+                                .next()
+                                .unwrap_or("No_Name")
+                                .replace(" ", "_")
+                                .to_string(),
+                        ),
+                    }
+                }
+                _ => {
+                    dice_job = DiceJob {
+                        descrption,
+                        company_name: Some(String::from("No_Name")) 
+                    }
+                }
+            }
 
             jobs.push(dice_job);
         }

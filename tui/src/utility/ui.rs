@@ -33,7 +33,7 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     // Dependencies for scraping
     let scraper = WebScraper::new();
     let http_client = HTTPClient::new();
-    let file_path = String::from("output.html");
+    let mut file_path = String::from("output.html");
 
     // This will hold the scraped results
     let results: Vec<Box<dyn GetPrettyHTML>>;
@@ -47,8 +47,13 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
                 .collect();
         }
         Strategy::Dice => {
-            results = scraper
-                .scrape(DiceJobStrategy, &http_client, &url)?
+            let res = scraper.scrape(DiceJobStrategy, &http_client, &url)?;
+            let first = &res[0];
+            if let Some(name) = &first.company_name {
+                file_path = format!("{}_{}", name.clone(), file_path);
+            }
+
+            results = res
                 .into_iter()
                 .map(|x| Box::new(x) as Box<dyn GetPrettyHTML>)
                 .collect();
